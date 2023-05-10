@@ -16,7 +16,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-
 app.use('/', router);
 app.set('port', process.env.PORT || 8080);
 app.listen(app.get('port'), () => {

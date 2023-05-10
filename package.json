@@ -2,13 +2,15 @@
   "name": "nft_caching_express_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.0.3",
     "ethers": "^6.3.0",
