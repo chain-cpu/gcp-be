@@ -1,13 +1,32 @@
 
-const database = require('./DB/db');
 const { ethers } = require('ethers');
 const erc721ABI = require('./ERC721ABI.json').ABI;
 const provider = new ethers.JsonRpcProvider(process.env.PROVIDER_URL);
 const axios = require('axios');
+const set = require('./DB/db').set;
+const get = require('./DB/db').get;
 
-let contractOwnerBasedData = database.contractOwnerBasedData
-let contractBasedData = database.contractBasedData
-let ownerBasedData = database.ownerBasedData
+const pushData = (address, data) => {
+    let cnt = get(`${address}_cnt`);
+    if(cnt == 'empty')
+        cnt = 0;
+    set(`${address}_cnt`, cnt + 1);
+    set(`${address}_${cnt}`, data);
+    console.log(require('./DB/db').allData);
+}
+
+exports.getData = (address) => {
+    const currentDataCnt = get(`${address}_cnt`);
+    let returnData = [];
+    if(currentDataCnt != "empty") {
+        for(let i = 0; i < currentDataCnt; i ++){
+            returnData.push(get(`${address}_${i}`));
+        }
+        
+    }
+    return returnData;
+    
+}
 
 const handleTX = async (contract, contractAddress, to , tokenId, event) => {
     let tokenURI, tokenDetails;
@@ -20,20 +39,12 @@ const handleTX = async (contract, contractAddress, to , tokenId, event) => {
         } catch{
             tokenDetails = {data: {name:"", image: "",edition: "", item: "",rarity: "",  description: "" }};
         } finally{
-            // FIXME: `${}-${}`
-            if (!contractOwnerBasedData[contractAddress + "-" + to]) {
-                contractOwnerBasedData[contractAddress + "-" + to] = []
-            }
-            contractOwnerBasedData[contractAddress + "-" + to].push({"Owner": to, "TokenID": tokenIdString, "TokenURI" : tokenURI, "Name" : tokenDetails.data.name,"Item" : tokenDetails.data.item,"Rarity" : tokenDetails.data.rarity ,"Description" : tokenDetails.data.description, "Image" : tokenDetails.data.image, "Edition": tokenDetails.data.edition });
-            if(!contractBasedData[contractAddress]){
-                contractBasedData[contractAddress] = []
-            }
-            // FIXME: lowercase (eg: Owner -> owner)
-            contractBasedData[contractAddress].push({"Owner" : to, "TokenID" : tokenIdString , "TokenURI" : tokenURI, "Name" : tokenDetails.data.name,"Item" : tokenDetails.data.item,"Rarity" : tokenDetails.data.rarity ,"Description" : tokenDetails.data.description, "Image" : tokenDetails.data.image, "Edition": tokenDetails.data.edition});
-            if(!ownerBasedData[to]){
-                ownerBasedData[to] = []
-            }
-            ownerBasedData[to].push({"Owner" : to, "TokenID" : tokenIdString , "TokenURI" : tokenURI, "Name" : tokenDetails.data.name,"Item" : tokenDetails.data.item,"Rarity" : tokenDetails.data.rarity ,"Description" : tokenDetails.data.description, "Image" : tokenDetails.data.image, "Edition": tokenDetails.data.edition});
+
+            data = {"owner": to, "tokenID": tokenIdString, "tokenURI" : tokenURI, "name" : tokenDetails.data.name,"item" : tokenDetails.data.item,"rarity" : tokenDetails.data.rarity ,"description" : tokenDetails.data.description, "image" : tokenDetails.data.animation_url, "edition": tokenDetails.data.edition };
+            pushData(`co_${contractAddress}_${to}`, data);
+            pushData(`o_${to}`, data);
+            pushData(`c_${contractAddress}`, data);
+           
         }    
     }
     
@@ -45,6 +56,7 @@ exports.subScribe = async (contractAddress) => {
     
     // initial indexing of the smart contract
     const events = await contract.queryFilter(filter, 0, 'latest');
+    console.log("hello");
     events.forEach(async event => {
         handleTX(contract, contractAddress, event.args.to, event.args.tokenId, event);
     });
