@@ -8,7 +8,7 @@ const get = require('./DB/db').get;
 
 const pushData = (address, data) => {
     let cnt = get(`${address}_cnt`);
-    if(cnt == 'empty')
+    if(cnt == undefined)
         cnt = 0;
     set(`${address}_cnt`, cnt + 1);
     set(`${address}_${cnt}`, data);
@@ -35,7 +35,6 @@ const handleTX = async (contract, contractAddress, to , tokenId, event) => {
         tokenURI = await contract.tokenURI(tokenId);
         try{
             tokenDetails = await axios.get(tokenURI);
-            console.log(tokenDetails);
         } catch{
             tokenDetails = {data: {name:"", image: "",edition: "", item: "",rarity: "",  description: "" }};
         } finally{
