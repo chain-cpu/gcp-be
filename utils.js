@@ -16,7 +16,7 @@ const pushData = (address, data) => {
 exports.getData = (address) => {
   const currentDataCnt = get(`${address}_cnt`);
   let returnData = [];
-  if (currentDataCnt != "empty") {
+  if (currentDataCnt != undefined) {
     for (let i = 0; i < currentDataCnt; i++) {
       returnData.push(get(`${address}_${i}`));
     }
