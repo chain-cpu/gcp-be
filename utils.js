@@ -5,12 +5,12 @@ const axios = require("axios");
 const set = require("./DB/db").set;
 const get = require("./DB/db").get;
 
+// this is util functin that pushes array data to the key/value storage
 const pushData = (address, data) => {
   let cnt = get(`${address}_cnt`);
   if (cnt == undefined) cnt = 0;
   set(`${address}_cnt`, cnt + 1);
   set(`${address}_${cnt}`, data);
-  console.log(require("./DB/db").allData);
 };
 
 exports.getData = (address) => {
@@ -62,6 +62,7 @@ const handleTX = async (contract, contractAddress, to, tokenId, event) => {
 };
 
 exports.subScribe = async (contractAddress) => {
+  // This is to prevent duplicated subscription
   if (get(contractAddress) == true) {
     return false;
   }
