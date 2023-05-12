@@ -62,6 +62,10 @@ const handleTX = async (contract, contractAddress, to, tokenId, event) => {
 };
 
 exports.subScribe = async (contractAddress) => {
+  if (get(contractAddress) == true) {
+    return false;
+  }
+  set(contractAddress, true);
   const contract = new ethers.Contract(contractAddress, erc721ABI, provider);
   const filter = contract.filters["Transfer"]();
 
