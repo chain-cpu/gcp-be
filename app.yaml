@@ -1,3 +1,6 @@
 runtime: nodejs16 # Specifies the runtime environment for your application (Node.js 16)
 
 instance_class: F2
+
+env_variables:
+  PROVIDER_URL: "https://polygon-mumbai.g.alchemy.com/v2/83583UM3t8cuQevA8zUWcDT5CQ52Wc4O"
