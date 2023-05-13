@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "c5646103-8652-4487-8b6f-9a0419b77fc5",
+		"name": "NFT_Caching",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27147084"
+	},
+	"item": [
+		{
+			"name": "getData",
+			"item": [
+				{
+					"name": "getByUserWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{real_url}}/getWalletNFTs/0x0A0b3e48E4D87ceD5a46eA42Ed942686C2b721b9",
+							"host": [
+								"{{real_url}}"
+							],
+							"path": [
+								"getWalletNFTs",
+								"0x0A0b3e48E4D87ceD5a46eA42Ed942686C2b721b9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByContractAndWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{real_url}}/getAll/0xa801A7bB73b16C541837Ec40e2A3B330169c1A94/0x0A0b3e48E4D87ceD5a46eA42Ed942686C2b721b9",
+							"host": [
+								"{{real_url}}"
+							],
+							"path": [
+								"getAll",
+								"0xa801A7bB73b16C541837Ec40e2A3B330169c1A94",
+								"0x0A0b3e48E4D87ceD5a46eA42Ed942686C2b721b9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByContract",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{real_url}}/getAll/0xa801A7bB73b16C541837Ec40e2A3B330169c1A94",
+							"host": [
+								"{{real_url}}"
+							],
+							"path": [
+								"getAll",
+								"0xa801A7bB73b16C541837Ec40e2A3B330169c1A94"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscribe with contract address",
+			"item": [
+				{
+					"name": "subscribe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "address",
+									"value": "0xa801A7bB73b16C541837Ec40e2A3B330169c1A94",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{real_url}}/subscribe",
+							"host": [
+								"{{real_url}}"
+							],
+							"path": [
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "real_url",
+			"value": "https://blockchain-project-386101.uc.r.appspot.com",
+			"type": "string"
+		}
+	]
+}
