@@ -66,6 +66,7 @@ exports.subScribe = async (contractAddress) => {
   if (get(contractAddress) == true) {
     return false;
   }
+  console.log(`provider url is ${process.env.PROVIDER_URL}`);
   set(contractAddress, true);
   const contract = new ethers.Contract(contractAddress, erc721ABI, provider);
   const filter = contract.filters["Transfer"]();
