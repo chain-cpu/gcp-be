@@ -1,24 +1,42 @@
-// const set = require('../DB/db').set;
-const get = require('../DB/db').get;
-const getData = require('../utils').getData;
-const subScribe = require('../utils').subScribe;
+import * as indexUtil from "./indexUtils.js";
+export function getNFTsbyContract(req, res) {
+  console.log("[CacheController::getNFTsByContract] invoked");
+  const { contract } = req.params;
+  let nfts = indexUtil.getNFTsByContract(contract);
+  let count = nfts.length;
 
-exports.getNFTsbyContract = (req, res) => {
-    console.log(get(`c_${req.params.address}`));
-    res.send(getData(`c_${req.params.address}`));
-};
+  return res.json({
+    count,
+    nfts,
+  });
+}
 
-exports.getNFTsByContractAndUser = (req, res) => {
-    res.send(getData(`co_${req.params.address}_${req.params.userWallet}`));
-};
+export function getNFTsByContractAndOwner(req, res) {
+  const { contract, owner } = req.params;
+  let nfts = indexUtil.getNFTsByContractAndOwner(contract, owner);
+  let count = nfts.length;
+  return res.json({
+    count,
+    nfts,
+  });
+}
 
-exports.getNFTsByUser = (req, res) => {
-    res.send(getData(`o_${req.params.userWallet}`));
-};
+export function getNFTsByOwner(req, res) {
+  const { owner } = req.params;
+  let nfts = indexUtil.getNFTsByOwner(owner);
+  let count = nfts.length;
+  return res.json({
+    count,
+    nfts,
+  });
+}
 
-exports.addContract = async (req, res) => {
-    contractAddress = req.body.address;
-    await subScribe(contractAddress);
-    res.send("success");
-
+export async function subscribe(req, res) {
+  console.log(`[CacheController::subscribe] invoked`);
+  // req.body = JSON.parse(req.body);
+  const { contract } = req.body;
+  console.log(req.body);
+  console.log(`[CacheController::subscribe] body{ contract: ${contract} }`);
+  await indexUtil.subScribe(contract);
+  return res.json({ msg: "success" });
 }
